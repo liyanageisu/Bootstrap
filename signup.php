@@ -63,6 +63,9 @@
           <div class="col-md-5">Last Name
             <input type="text" class="form-control" placeholder="Last name" name="l_name" value="<?php echo $l_name; ?>">
           </div>
+          <div class="col-md-5">User name
+            <input type="text" class="form-control" placeholder="User name" name="username" value="<?php echo $username; ?>">
+          </div>
         </div>
         <div class="form-row">
            <div class="form-group col-md-8">

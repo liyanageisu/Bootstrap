@@ -1,6 +1,17 @@
+<?php include('connection.php') ?>
+<?php 
+  session_start(); 
 
-<?php include('login.php') ?>
-
+  if (!isset($_SESSION['email'])) {
+  	$_SESSION['msg'] = "You must log in first";
+  	header('location: index.php');
+  }
+  if (isset($_GET['logout'])) {
+  	session_destroy();
+  	unset($_SESSION['email']);
+  	header("location: index.php");
+  }
+?>
 <html lang="eng">
     <head>
         <meta charset="UTF-8">
@@ -35,48 +46,37 @@
                 <li class="nav-item contact"><a href="" class="nav-link">Contact</a></li>
                 <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span><img src="../image/cart.png" width="30" height="30" alt="">[0]</a></li>
             </ul>
+                
            </div>
-                <!-- <form class="form-inline my-2 my-lg-0">
-                  <a class="btn btn-secondary" href="signup.php" role="button">Sign up</a>
-                 </form> -->
+                <form class="form-inline my-2 my-lg-0">
+                <div class="para">
+                  <p>You are logged in as a user</P>
+                 </div>
+                  <a class="btn btn-secondary" name="logout" role="button" href="">Log out</a>
+                </form> 
             
         </nav>
           <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
           <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
           <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-        <div class="conatiner bg-login">
-          <div class="row">
-            <div class="coL-md-4 col-sm-3 col-xm-12"></div>
-            <div class="coL-md-4 col-sm-3 col-xm-12"></div>
-            <!-- start form -->
-            <form class="form-conatiner" method="post" action="index.php">
-              <?php include('errors.php')?>
-              <h1>Login</h1>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Email</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email">
-                <!-- <small id="emailHelp" class="form-text text-muted"></small> -->
-              </div>
-              <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
-              </div>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Remember me</label>
-              </div>
-              <button type="submit" class="btn btn-success btn-block" value="login" name="login">Submit</button>
-              <p>Not yet a member? <a href="signup.php">Sign up</a></P>
-            </form>
-            <!-- end form -->
-          </div>
-          <div class="coL-md-3 col-sm-4 col-xm-12"></div>
-           </div>
-          </div>
-        </div>
-       
+            <div class="content">
+                <?php if(isset($_SESSION['success'])) : ?>
+                  <div class="error success">
+                    <h3>
+                     <?php 
+          	            echo $_SESSION['success']; 
+          	            unset($_SESSION['success']);
+                      ?>
+                  	</h3>
+                  </div>
+                <?php endif ?>
+                <?php  if (isset($_SESSION['email'])) : ?>
+    	            <p>Welcome <strong><?php echo $_SESSION['email']; ?></strong></p>
+    	            <p> <a href="index.php?logout='1'" style="color: red;">logout</a> </p>
+                <?php endif ?>
+            </div>
+    
     </body>
-</html>
 
- 
+</html>

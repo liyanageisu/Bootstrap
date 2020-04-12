@@ -1,12 +1,13 @@
+<?php include('connection.php') ?>
 <?php
 
-session_start();
+//session_start();
 
-//Variables
 
 //$user_id="";
 $f_name ="";
 $l_name="";
+$username="";
 $email="";
 $password="";
 $address1="";
@@ -16,14 +17,11 @@ $province="";
 $zip="";
 $errors = array();
 
-$db = mysqli_connect(
-    'localhost','root','','esupper'
-);
-
 if(isset($_POST['submit'])){
 //$user_id= $user_id =mysqli_real_escape_string($db, $_POST['user_id']);
 $f_name =mysqli_real_escape_string($db, $_POST['f_name']);
 $l_name=mysqli_real_escape_string($db, $_POST['l_name']);
+$username=mysqli_real_escape_string($db, $_POST['username']);
 $email=mysqli_real_escape_string($db, $_POST['email']);
 $password=mysqli_real_escape_string($db, $_POST['password']);
 $address1=mysqli_real_escape_string($db, $_POST['address1']);
@@ -33,12 +31,14 @@ $province=mysqli_real_escape_string($db, $_POST['province']);
 $zip=mysqli_real_escape_string($db, $_POST['zip']);
 
 
-
 if(empty($f_name)){
     array_push($errors,"First name is required");
 }
 if(empty($l_name)){
     array_push($errors,"Last name is required");
+}
+if(empty($username)){
+    array_push($errors,"User name is required");
 }
 if(empty($email)){
     array_push($errors,"Email is required");
@@ -60,11 +60,13 @@ if(empty($zip)){
 }
 
 
-$user_check_query = "SELECT * FROM users WHERE email='$email' LIMIT 1 ";
+$user_check_query = "SELECT * FROM users WHERE username='$username' AND email='$email' LIMIT 1 ";
 $result = mysqli_query($db,$user_check_query);
 $user = mysqli_fetch_assoc($result);
 
-
+    if($user['username']== $username){
+    array_push($errors, "User is already exists");
+    }
     if($user['email']== $email){
         array_push($errors, "User is already exists");
     }
@@ -74,11 +76,11 @@ $user = mysqli_fetch_assoc($result);
 if (count($errors) == 0) {
     $password = md5($password);//encrypt the password before saving in the database
 
-    $query = "INSERT INTO users (f_name,l_name, email, password,address1,address2,city,province,zip) 
-              VALUES('$f_name','$l_name', '$email', '$password','$address1','$address2','$city','$province','$zip')";
+    $query = "INSERT INTO users (f_name,l_name, username, email, password,address1,address2,city,province,zip) 
+              VALUES('$f_name','$l_name','$username', '$email', '$password','$address1','$address2','$city','$province','$zip')";
     mysqli_query($db, $query);
     $_SESSION['email'] = $email;
     $_SESSION['success'] = "You are now logged in";
-    header('location: user.php');
+    //header('location: user.php');
 }
 

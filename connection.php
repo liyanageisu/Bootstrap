@@ -1,6 +1,5 @@
-<?php
 
-session_start();
+<?php
 
 $db = mysqli_connect(
     'localhost',
